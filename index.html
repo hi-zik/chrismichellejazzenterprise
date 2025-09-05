@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Mitchell Jazz - Official Inner Circle</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CHRIS MITCHELL JAZZ</h1>
+            <p>Official Inner Circle Fan Club Membership</p>
+        </header>
+
+        <div class="user-actions">
+            <div class="user-status" id="userStatus">Not logged in</div>
+            <button class="btn" id="loginBtn">Login</button>
+            <button class="btn" id="signupBtn">Sign Up</button>
+            <button class="btn" id="logoutBtn" style="display: none;">Logout</button>
+        </div>
+
+        <div class="nav-tabs">
+            <div class="nav-tab" data-tab="home">Home</div>
+            <div class="nav-tab" data-tab="membership">Membership</div>
+            <div class="nav-tab" data-tab="meetgreet">Meet & Greet</div>
+            <div class="nav-tab" data-tab="payment">Payment Options</div>
+            <div class="nav-tab" data-tab="testimonials">Testimonials</div>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <!-- Home Tab -->
+        <div id="home" class="tab-content active">
+            <section id="letter">
+                <h2>A Letter from Management</h2>
+                <p>Dear Dedicated Fan,</p>
+                <p>On behalf of Chris Mitchell and our entire team, we extend our deepest gratitude for your unwavering
+                    support and passion for his music. It is fans like you who inspire the soulful melodies that define
+                    his craft.</p>
+                <p>To honor our most committed supporters, we are formally launching the <strong>Official Chris Mitchell
+                        Jazz Inner Circle</strong>. This is not merely a fan club; it is a prestigious society designed
+                    to provide an unparalleled connection to the artist and his world. This program offers tiered
+                    membership levels and exclusive, intimate Private Meet & Greet experiences, crafted to create
+                    lasting memories far beyond the concert hall.</p>
+                <p>We encourage you to review this information thoroughly. All arrangements are handled directly through
+                    our secure portal to guarantee authenticity and your complete peace of mind.</p>
+                <p>Warmly,</p>
+                <p><strong>The Management Team</strong><br>Chris Mitchell Jazz | Affable Records</p>
+            </section>
+
+            <div class="cta">
+                <h2 style="color: var(--color-light)">Ready to Join the Inner Circle?</h2>
+                <p>Select a membership tier or experience package below</p>
+                <a href="#" class="btn btn-secondary" id="exploreMembership">Explore Memberships</a>
+            </div>
+        </div>
+
+        <!-- Membership Tab -->
+        <div id="membership" class="tab-content">
+            <h2>TIER 1: OFFICIAL FAN CLUB MEMBERSHIP</h2>
+            <p>Become an official member of the community and enjoy a suite of year-round benefits.</p>
+
+            <table>
+                <tr>
+                    <th>Membership Tier</th>
+                    <th>One-Time Registration Fee</th>
+                    <th>Key Benefits</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>Regular Member</strong></td>
+                    <td><strong>$2,500</strong></td>
+                    <td>Exclusive Member Card, Priority Event Communication, 20% Merchandise Discount, Early Access to
+                        Digital Content, Birthday Perks.</td>
+                    <td><button class="btn" onclick="selectMembership('regular')">Select</button></td>
+                </tr>
+                <tr>
+                    <td><strong>VIP Member</strong></td>
+                    <td><strong>$5,000</strong></td>
+                    <td><em>All Regular benefits, plus:</em> Limited Edition Signed Merchandise Bundle, Pre-Sale Ticket
+                        Access (48 hours before public), Exclusive VIP Newsletter, Access to Member-Only Online Portal.
+                    </td>
+                    <td><button class="btn" onclick="selectMembership('vip')">Select</button></td>
+                </tr>
+                <tr>
+                    <td><strong>VVIP Gold Member</strong></td>
+                    <td><strong>$10,000</strong></td>
+                    <td><em>All VIP benefits, plus:</em> Your Name on Official Website Patron List, Personalised Welcome
+                        Video from Chris, Complimentary Ticket to One Show (Select Cities), First Right of Refusal on
+                        Future Experiences.</td>
+                    <td><button class="btn" onclick="selectMembership('vvip')">Select</button></td>
+                </tr>
+            </table>
+
+            <div class="highlight">
+                <h3>Why Get Registered?</h3>
+                <p>Imagine walking past the long lines because your fan card gives you priority entry. You get early or
+                    VIP access to concerts, and fan-only events where you can connect directly with the artist. These
+                    are moments casual fans will never experience. Your card isn't just plastic — it's proof you're part
+                    of an exclusive inner circle. Furthermore, why pay full price when you can enjoy exclusive savings?
+                    Your fan card unlocks reduced prices on official merchandise. Over time, the savings could cover the
+                    cost of the membership itself.</p>
+            </div>
+        </div>
+
+        <!-- Meet & Greet Tab -->
+        <div id="meetgreet" class="tab-content">
+            <h2>TIER 2: PRIVATE MEET & GREET EXPERIENCE PACKAGES</h2>
+            <p>For the ultimate fan, these all-inclusive experiences are designed for a personal and unforgettable
+                encounter with Chris Mitchell. <strong>All MEET & GREET tickets are inclusive of the: Flight ticket,
+                    Hotel reservations, Logistics, and Security.</strong></p>
+
+            <table>
+                <tr>
+                    <th>Experience Tier</th>
+                    <th>Experience Fee</th>
+                    <th>What's Included</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>Regular Meet & Greet</strong></td>
+                    <td><strong>$1,000</strong></td>
+                    <td>A meeting with Chris Mitchell in the presence of his management. A professional photo
+                        opportunity and autograph session. (No external private conversations allowed).</td>
+                    <td><button class="btn" onclick="selectMeetGreet('regular')">Select</button></td>
+                </tr>
+                <tr>
+                    <td><strong>VIP Meet & Greet</strong></td>
+                    <td><strong>$2,000</strong></td>
+                    <td>A private Meeting between just you and Chris Mitchell. Includes a personal car tour cruise. A
+                        more intimate setting for conversation. (No external conversations attached).</td>
+                    <td><button class="btn" onclick="selectMeetGreet('vip')">Select</button></td>
+                </tr>
+                <tr>
+                    <td><strong>VVIP Gold Meet & Greet</strong></td>
+                    <td><strong>$3,000</strong></td>
+                    <td>The pinnacle experience. A completely private meeting without the presence of management.
+                        Includes a SPECIAL INCLUSIVE "A private Helicopter Tour or a Boat Cruise" (your choice). Plus,
+                        free show tickets reservation for a 2-month period. <strong>Private and external conversations
+                            allowed.</strong> This includes the privilege of making phone and video calls even after the
+                        meet and greet period.</td>
+                    <td><button class="btn" onclick="selectMeetGreet('vvip')">Select</button></td>
+                </tr>
+            </table>
+
+            <p><strong>Select your desired experience above to proceed with secure payment.</strong></p>
+        </div>
+
+        <!-- Payment Tab -->
+        <div id="payment" class="tab-content">
+            <h2>SECURE PAYMENT OPTIONS</h2>
+            <p>We offer multiple secure payment methods for your convenience. All transactions are encrypted and
+                processed securely.</p>
+
+            <div class="payment-option">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgMzAwIj48cmVjdCB4PSIxMCIgeT0iNjUiIHdpZHRoPSIyODAiIGhlaWdodD0iMTcwIiByeD0iMTUiIHJ5PSIxNSIgZmlsbD0iIzFhYTdmMSIvPjxjaXJjbGUgY3g9IjYwIiBjeT0iMTUwIiByPSIyMCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjE1MCIgY3k9IjE1MCIgcj0iMjAiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSIyNDAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSIjZmZmIi8+PC9zdmc+"
+                    alt="Bitcoin" class="payment-logo">
+                <div>
+                    <h3>Bitcoin</h3>
+                    <p>Pay with Bitcoin for anonymous, secure transactions. After selection, you will receive our
+                        Bitcoin wallet address for transfer.</p>
+                    <button class="btn" onclick="selectPayment('bitcoin')">Pay with Bitcoin</button>
+                </div>
+            </div>
+
+            <div class="payment-option">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDAgMzAwIj48cmVjdCB4PSI1MCIgeT0iNTAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iMjAiIHJ5PSIyMCIgZmlsbD0iIzAwQzZBNiIvPjxwYXRoIGQ9Ik0xMDAgMTUwIEwxMzAgMTIwIEwxNzAgMTgwIEwyMDAgMTUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg=="
+                    alt="Cash App" class="payment-logo">
+                <div>
+                    <h3>Cash App</h3>
+                    <p>Use Cash App for quick and easy payments. Our Cash App ID will be provided after selection.</p>
+                    <button class="btn" onclick="selectPayment('cashapp')">Pay with Cash App</button>
+                </div>
+            </div>
+
+            <div class="payment-option">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" width="120" height="auto"
+                    alt="PayPal" class="payment-logo">
+                <div>
+                    <h3>PayPal</h3>
+                    <p>Pay securely with PayPal. You will be redirected to our secure PayPal checkout after selection.
+                    </p>
+                    <button class="btn" onclick="selectPayment('paypal')">Pay with PayPal</button>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>Secure & Encrypted Transactions</h3>
+                <p>All payments are processed through our encrypted payment system. Your financial information is secure
+                    and transactions are non-traceable for your privacy.</p>
+            </div>
+        </div>
+
+        <!-- Testimonials Tab -->
+        <div id="testimonials" class="tab-content">
+            <h2>FAN TESTIMONIALS</h2>
+            <p>Hear what our Inner Circle members have to say about their experiences.</p>
+
+            <div class="testimonial">
+                <p>"Meeting Chris Mitchell through the VVIP experience was the highlight of my year. The helicopter tour
+                    was absolutely breathtaking, and the private conversation we had was something I'll cherish forever.
+                    Worth every penny!"</p>
+                <div class="testimonial-author">- James R., New York</div>
+            </div>
+
+            <div class="testimonial">
+                <p>"As a VIP member, I get access to tickets before anyone else. I've never missed a show since joining.
+                    The signed merchandise bundle is amazing quality and looks great in my music room."</p>
+                <div class="testimonial-author">- Sarah L., Los Angeles</div>
+            </div>
+
+            <div class="testimonial">
+                <p>"The regular membership has already paid for itself with the merchandise discounts alone. Plus
+                    getting priority communication about events makes me feel like a true insider. Highly recommend!"
+                </p>
+                <div class="testimonial-author">- Michael T., Chicago</div>
+            </div>
+
+            <div class="testimonial">
+                <p>"I chose the Bitcoin payment option and it was seamless. The entire process was discreet and secure.
+                    The management team was helpful throughout the entire process."</p>
+                <div class="testimonial-author">- Alex P., Miami</div>
+            </div>
+
+            <div class="cta">
+                <h2>Ready to Create Your Own Experience?</h2>
+                <p>Join the Inner Circle today and create memories that will last a lifetime</p>
+                <a href="#" class="btn btn-secondary" id="joinNow">Join Now</a>
+            </div>
+        </div>
+
+        <!-- Login Form (initially hidden) -->
+        <div id="loginForm" style="display: none;">
+            <section>
+                <h2>Login to Your Account</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                    <button type="button" class="btn" id="cancelLogin">Cancel</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Signup Form (initially hidden) -->
+        <div id="signupForm" style="display: none;">
+            <section>
+                <h2>Create Your Account</h2>
+                <form id="signupFormElement">
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupMembership">Select Membership Type</label>
+                        <select id="signupMembership">
+                            <option value="regular">Regular Membership ($2,500)</option>
+                            <option value="vip">VIP Membership ($5,000)</option>
+                            <option value="vvip">VVIP Gold Membership ($10,000)</option>
+                            <option value="none">Not sure yet</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Create Account</button>
+                    <button type="button" class="btn" id="cancelSignup">Cancel</button>
+                </form>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Disclaimer:</strong> All membership benefits and experiences are facilitated directly by Chris
+                Mitchell Jazz Management. All fees are non-refundable. Terms, conditions, and availability are subject
+                to change. © 2023 Affable Records. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
