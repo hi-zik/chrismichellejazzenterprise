@@ -245,4 +245,3 @@ function selectPayment(method) {
 window.selectMembership = selectMembership;
 window.selectMeetGreet = selectMeetGreet;
 window.selectPayment = selectPayment;
-    

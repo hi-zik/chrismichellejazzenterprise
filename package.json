@@ -1,35 +1,33 @@
 {
   "name": "chris-mitchell-jazz-website",
   "version": "1.0.0",
-  "description": "Official Chris Mitchell Jazz Inner Circle fan club website",
+  "description": "Official Chris Mitchell Jazz Inner Circle fan club website with backend",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve . -p 3000",
-    "build": "echo 'Static site - no build step required'",
-    "start": "npx serve . -p 8080",
-    "preview": "npx serve . -p 5000",
+    "dev": "vercel dev",
+    "build": "echo 'Vercel will handle the build'",
+    "start": "vercel dev",
     "deploy": "vercel --prod"
   },
   "keywords": [
     "jazz",
     "music",
     "fan-club",
-    "static-website",
+    "vercel",
+    "serverless",
     "html",
     "css",
     "javascript"
   ],
   "author": "Chris Mitchell Jazz Management",
   "license": "MIT",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  },
   "devDependencies": {
-    "serve": "^14.2.0"
+    "vercel": "^32.0.0"
   },
-  "dependencies": {},
   "engines": {
-    "node": ">=16.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "your-repository-url"
+    "node": ">=18.0.0"
   }
 }

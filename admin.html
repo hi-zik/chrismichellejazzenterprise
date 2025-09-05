@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Chris Mitchell Jazz</title>
+    <link rel="stylesheet" href="main.css">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-header {
+            background: linear-gradient(to right, var(--color-primary), #e74c3c);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .data-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+        
+        .data-table th {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginSection" class="login-form">
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label for="adminPassword">Admin Password</label>
+                <input type="password" id="adminPassword" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div id="loginError" class="error hidden"></div>
+    </div>
+
+    <div id="dashboardSection" class="hidden">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Admin Dashboard</h1>
+                <p>Chris Mitchell Jazz - User Management</p>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <div id="loadingIndicator" class="loading">Loading data...</div>
+            <div id="errorIndicator" class="error hidden"></div>
+
+            <div id="dashboardContent" class="hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalUsers">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalSignups">0</div>
+                        <div class="stat-label">Total Signups</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalLogins">0</div>
+                        <div class="stat-label">Total Logins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="vipMembers">0</div>
+                        <div class="stat-label">VIP+ Members</div>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>Recent Users</h3>
+                    <table class="data-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Membership</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="data-section">
+                    <h3>Recent Signups</h3>
+                    <table class="data-table" id="signupsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Membership</th>
+                                <th>Timestamp</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="data-section">
+                    <h3>Recent Logins</h3>
+                    <table class="data-table" id="loginsTable">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Timestamp</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let adminToken = null;
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            try {
+                const response = await fetch('/api/admin', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${password}`
+                    }
+                });
+
+                if (response.ok) {
+                    adminToken = password;
+                    showDashboard();
+                    loadDashboardData();
+                } else {
+                    showError('loginError', 'Invalid admin password');
+                }
+            } catch (error) {
+                showError('loginError', 'Login failed. Please try again.');
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+        }
+
+        function logout() {
+            adminToken = null;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('adminPassword').value = '';
+            hideError('loginError');
+        }
+
+        async function loadDashboardData() {
+            try {
+                document.getElementById('loadingIndicator').classList.remove('hidden');
+                document.getElementById('dashboardContent').classList.add('hidden');
+                
+                const response = await fetch('/api/admin', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load data');
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    populateDashboard(data.data);
+                    document.getElementById('loadingIndicator').classList.add('hidden');
+                    document.getElementById('dashboardContent').classList.remove('hidden');
+                } else {
+                    throw new Error(data.message);
+                }
+
+            } catch (error) {
+                document.getElementById('loadingIndicator').classList.add('hidden');
+                showError('errorIndicator', 'Failed to load dashboard data');
+            }
+        }
+
+        function populateDashboard(data) {
+            const { stats, users, recentSignups, recentLogins } = data;
+            
+            // Update stats
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('totalSignups').textContent = stats.totalSignups;
+            document.getElementById('totalLogins').textContent = stats.totalLogins;
+            
+            const vipCount = (stats.membershipBreakdown.vip || 0) + (stats.membershipBreakdown.vvip || 0);
+            document.getElementById('vipMembers').textContent = vipCount;
+
+            // Populate users table
+            populateTable('usersTable', users, ['name', 'email', 'membership', 'createdAt']);
+            
+            // Populate signups table
+            populateTable('signupsTable', recentSignups, ['name', 'email', 'membership', 'timestamp', 'ip']);
+            
+            // Populate logins table
+            populateTable('loginsTable', recentLogins, ['email', 'timestamp', 'ip']);
+        }
+
+        function populateTable(tableId, data, columns) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = '';
+
+            data.forEach(item => {
+                const row = tbody.insertRow();
+                columns.forEach(column => {
+                    const cell = row.insertCell();
+                    let value = item[column] || '-';
+                    
+                    // Format timestamps
+                    if (column === 'createdAt' || column === 'timestamp') {
+                        value = new Date(value).toLocaleString();
+                    }
+                    
+                    cell.textContent = value;
+                });
+            });
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

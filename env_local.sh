@@ -1,0 +1,4 @@
+# .env.local
+ADMIN_PASSWORD=zeero@hajahbless
+KV_REST_API_URL=your_kv_url_from_vercel_dashboard
+KV_REST_API_TOKEN=your_kv_token_from_vercel_dashboard
