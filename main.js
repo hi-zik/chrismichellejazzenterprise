@@ -96,37 +96,87 @@ function hideAuthForms() {
     document.getElementById('signupForm').style.display = 'none';
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
-    if (email && password) {
-        currentUser = { email: email };
-        hideAuthForms();
-        updateUserStatus();
-        showNotification('Login successful! Welcome back.');
-        clearForm('loginFormElement');
+    if (!email || !password) {
+        showNotification('Please enter both email and password.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'login',
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            hideAuthForms();
+            updateUserStatus();
+            showNotification('Login successful! Welcome back.');
+            clearForm('loginFormElement');
+        } else {
+            showNotification(data.message || 'Login failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showNotification('Login failed. Please check your connection and try again.');
     }
 }
 
-function handleSignup(e) {
+async function handleSignup(e) {
     e.preventDefault();
     const name = document.getElementById('signupName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const membership = document.getElementById('signupMembership').value;
     
-    if (name && email && password) {
-        currentUser = { 
-            name: name, 
-            email: email, 
-            membership: membership 
-        };
-        hideAuthForms();
-        updateUserStatus();
-        showNotification('Account created successfully! Welcome to the Inner Circle.');
-        clearForm('signupFormElement');
+    if (!name || !email || !password) {
+        showNotification('Please fill in all required fields.');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'signup',
+                name: name,
+                email: email,
+                password: password,
+                membership: membership
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            hideAuthForms();
+            updateUserStatus();
+            showNotification('Account created successfully! Welcome to the Inner Circle.');
+            clearForm('signupFormElement');
+        } else {
+            showNotification(data.message || 'Account creation failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        showNotification('Account creation failed. Please check your connection and try again.');
     }
 }
 
@@ -236,27 +286,38 @@ async function selectPayment(method) {
     };
     
     const methodName = paymentMethods[method];
-    if (methodName) {
-        try {
-            // Log payment selection to database
-            await fetch('/api/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'log_payment',
-                    email: currentUser.email,
-                    paymentMethod: methodName,
-                    timestamp: new Date().toISOString()
-                })
-            });
-            
+    if (!methodName) {
+        showNotification('Invalid payment method selected.');
+        return;
+    }
+
+    try {
+        // Log payment selection to database
+        const response = await fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'log_payment',
+                email: currentUser.email,
+                paymentMethod: methodName,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
             showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
-        } catch (error) {
-            console.error('Payment logging error:', error);
-            showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
+            console.log('Payment method logged successfully:', data);
+        } else {
+            showNotification('Payment selection logged, but there was an issue with the server response.');
+            console.error('Payment logging response:', data);
         }
+    } catch (error) {
+        console.error('Payment logging error:', error);
+        showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
     }
 }
 

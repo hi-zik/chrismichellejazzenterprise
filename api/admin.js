@@ -37,8 +37,11 @@ export default async function handler(req, res) {
             // Get recent signups
             const signups = await kv.lrange('signups', 0, 99) || [];
             
-            // Get recent logins
+            // Get recent logins  
             const logins = await kv.lrange('logins', 0, 99) || [];
+
+            // Get recent payments
+            const payments = await kv.lrange('payments', 0, 99) || [];
 
             // Get all users
             const userKeys = await kv.keys('user:*') || [];
@@ -63,11 +66,6 @@ export default async function handler(req, res) {
                     const membership = user.membership || 'none';
                     acc[membership] = (acc[membership] || 0) + 1;
                     return acc;
-                }, {}),
-                paymentBreakdown: payments.reduce((acc, payment) => {
-                    const method = payment.paymentMethod || 'unknown';
-                    acc[method] = (acc[method] || 0) + 1;
-                    return acc;
                 }, {})
             };
 
@@ -75,7 +73,7 @@ export default async function handler(req, res) {
                 success: true,
                 data: {
                     stats,
-                    users: users.slice(0, 50), // Limit to 50 users
+                    users: users.slice(0, 50),
                     recentSignups: signups.slice(0, 20),
                     recentLogins: logins.slice(0, 20),
                     recentPayments: payments.slice(0, 20)

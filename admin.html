@@ -104,6 +104,10 @@
             border-radius: 5px;
             margin: 10px 0;
         }
+        
+        :root {
+            --color-primary: #2c3e50;
+        }
     </style>
 </head>
 <body>
@@ -143,6 +147,10 @@
                     <div class="stat-card">
                         <div class="stat-number" id="totalLogins">0</div>
                         <div class="stat-label">Total Logins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPayments">0</div>
+                        <div class="stat-label">Payment Selections</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" id="vipMembers">0</div>
@@ -187,6 +195,21 @@
                         <thead>
                             <tr>
                                 <th>Email</th>
+                                <th>Timestamp</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="data-section">
+                    <h3>Payment Method Selections</h3>
+                    <table class="data-table" id="paymentsTable">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Payment Method</th>
                                 <th>Timestamp</th>
                                 <th>IP Address</th>
                             </tr>
@@ -266,34 +289,49 @@
 
             } catch (error) {
                 document.getElementById('loadingIndicator').classList.add('hidden');
-                showError('errorIndicator', 'Failed to load dashboard data');
+                showError('errorIndicator', 'Failed to load dashboard data: ' + error.message);
             }
         }
 
         function populateDashboard(data) {
-            const { stats, users, recentSignups, recentLogins } = data;
+            const { stats, users, recentSignups, recentLogins, recentPayments } = data;
             
             // Update stats
-            document.getElementById('totalUsers').textContent = stats.totalUsers;
-            document.getElementById('totalSignups').textContent = stats.totalSignups;
-            document.getElementById('totalLogins').textContent = stats.totalLogins;
+            document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+            document.getElementById('totalSignups').textContent = stats.totalSignups || 0;
+            document.getElementById('totalLogins').textContent = stats.totalLogins || 0;
+            document.getElementById('totalPayments').textContent = stats.totalPayments || 0;
             
             const vipCount = (stats.membershipBreakdown.vip || 0) + (stats.membershipBreakdown.vvip || 0);
             document.getElementById('vipMembers').textContent = vipCount;
 
             // Populate users table
-            populateTable('usersTable', users, ['name', 'email', 'membership', 'createdAt']);
+            populateTable('usersTable', users || [], ['name', 'email', 'membership', 'createdAt']);
             
             // Populate signups table
-            populateTable('signupsTable', recentSignups, ['name', 'email', 'membership', 'timestamp', 'ip']);
+            populateTable('signupsTable', recentSignups || [], ['name', 'email', 'membership', 'timestamp', 'ip']);
             
             // Populate logins table
-            populateTable('loginsTable', recentLogins, ['email', 'timestamp', 'ip']);
+            populateTable('loginsTable', recentLogins || [], ['email', 'timestamp', 'ip']);
+            
+            // Populate payments table
+            populateTable('paymentsTable', recentPayments || [], ['email', 'paymentMethod', 'timestamp', 'ip']);
         }
 
         function populateTable(tableId, data, columns) {
             const tbody = document.querySelector(`#${tableId} tbody`);
             tbody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                const row = tbody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = columns.length;
+                cell.textContent = 'No data available';
+                cell.style.textAlign = 'center';
+                cell.style.fontStyle = 'italic';
+                cell.style.color = '#666';
+                return;
+            }
 
             data.forEach(item => {
                 const row = tbody.insertRow();
@@ -303,7 +341,11 @@
                     
                     // Format timestamps
                     if (column === 'createdAt' || column === 'timestamp') {
-                        value = new Date(value).toLocaleString();
+                        try {
+                            value = new Date(value).toLocaleString();
+                        } catch (e) {
+                            value = value || '-';
+                        }
                     }
                     
                     cell.textContent = value;
