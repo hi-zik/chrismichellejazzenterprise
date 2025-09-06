@@ -4,9 +4,7 @@
   "description": "Official Chris Mitchell Jazz Inner Circle fan club website with backend",
   "main": "index.html",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'Vercel will handle the build'",
-    "start": "vercel dev",
+    "build": "echo 'Vercel will handle the build'", 
     "deploy": "vercel --prod"
   },
   "keywords": [
