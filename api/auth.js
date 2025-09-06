@@ -2,7 +2,7 @@
 import { kv } from '@vercel/kv';
 
 // Simple admin authentication (use proper auth in production)
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export default async function handler(req, res) {
     // Enable CORS
