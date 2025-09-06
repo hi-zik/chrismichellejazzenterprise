@@ -226,7 +226,7 @@ function selectMeetGreet(type) {
 }
 
 // Payment selection functions
-function selectPayment(method) {
+async function selectPayment(method) {
     if (!requireAuth()) return;
     
     const paymentMethods = {
@@ -237,7 +237,26 @@ function selectPayment(method) {
     
     const methodName = paymentMethods[method];
     if (methodName) {
-        showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
+        try {
+            // Log payment selection to database
+            await fetch('/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'log_payment',
+                    email: currentUser.email,
+                    paymentMethod: methodName,
+                    timestamp: new Date().toISOString()
+                })
+            });
+            
+            showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
+        } catch (error) {
+            console.error('Payment logging error:', error);
+            showNotification(`You selected ${methodName} payment. Our agent will contact you with payment details.`);
+        }
     }
 }
 

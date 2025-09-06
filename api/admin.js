@@ -58,9 +58,15 @@ export default async function handler(req, res) {
                 totalUsers: users.length,
                 totalSignups: signups.length,
                 totalLogins: logins.length,
+                totalPayments: payments.length,
                 membershipBreakdown: users.reduce((acc, user) => {
                     const membership = user.membership || 'none';
                     acc[membership] = (acc[membership] || 0) + 1;
+                    return acc;
+                }, {}),
+                paymentBreakdown: payments.reduce((acc, payment) => {
+                    const method = payment.paymentMethod || 'unknown';
+                    acc[method] = (acc[method] || 0) + 1;
                     return acc;
                 }, {})
             };
@@ -71,7 +77,8 @@ export default async function handler(req, res) {
                     stats,
                     users: users.slice(0, 50), // Limit to 50 users
                     recentSignups: signups.slice(0, 20),
-                    recentLogins: logins.slice(0, 20)
+                    recentLogins: logins.slice(0, 20),
+                    recentPayments: payments.slice(0, 20)
                 }
             });
 

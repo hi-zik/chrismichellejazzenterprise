@@ -146,6 +146,28 @@ export default async function handler(req, res) {
                     }
                 });
 
+            } else if (action === 'log_payment') {
+                // Log payment method selection
+                if (!email || !req.body.paymentMethod) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Email and payment method are required'
+                    });
+                }
+
+                // Log payment selection
+                await kv.lpush('payments', {
+                    email,
+                    paymentMethod: req.body.paymentMethod,
+                    timestamp: req.body.timestamp || new Date().toISOString(),
+                    ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                });
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Payment method logged'
+                });
+
             } else {
                 return res.status(400).json({
                     success: false,
